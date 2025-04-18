@@ -1,0 +1,6 @@
+apiVersion: v1
+appVersion: 1.0.0
+description: Helm chart for deploying dify resources.
+icon: logo.png
+name: dify
+version: 1.0.0
