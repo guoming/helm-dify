@@ -1,5 +1,6 @@
 {{- if .Values.istioGateway.enabled -}}
-{{- $svcName := include "dify.fullname" . -}}
+{{- $svcHost := include "dify.fullname" . -}}
+{{- $svcName := include "dify.name" . -}}
 {{- $svcPort := .Values.service.port -}}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -30,22 +31,22 @@ spec:
     - mesh
     - {{ template "dify.gateway.fullname" . }}
   hosts:
-    - "{{ $svcName }}"
+    - "{{ $svcHost }}"
   {{- range .Values.istioGateway.hosts }}
     - "{{ .host }}"
   {{- end }}
   http:
     - route:
       - destination:
-          host: "{{ $svcName }}"
-          subset: "master" 
+          host: "{{ $svcHost }}"
+          subset: "master"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: {{ template "dify.destinationRule.fullname" . }}
 spec:
-  host: "{{ $svcName }}"
+  host: "{{ $svcHost }}"
   subsets:
     - name: "master"
       labels:
